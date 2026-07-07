@@ -535,6 +535,57 @@ html.introLocked, html.introLocked body{overflow:hidden}
   .choice.pocketChoice .meta{grid-column:1}
 }
 
+/* Quantum workflow hero artwork */
+.labScene.workflowHero{
+  height:auto;
+  min-height:0;
+  background:#07111f;
+}
+.workflowHeroImage{
+  width:100%;
+  aspect-ratio:1536 / 403;
+  object-fit:cover;
+  display:block;
+}
+.workflowHeroCaption{
+  padding:9px 12px 10px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
+  background:linear-gradient(180deg,rgba(7,17,31,.28),rgba(7,17,31,.88));
+}
+
+/* Candidate molecular structure image cards */
+.choice.candidateChoice{
+  grid-template-columns:170px 1fr;
+  align-items:stretch;
+}
+.candidateThumb{
+  width:100%;
+  height:132px;
+  padding:0;
+  overflow:hidden;
+  background:#08101b;
+}
+.candidateThumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .25s ease;
+}
+.choice.candidateChoice:hover .candidateThumb img{transform:scale(1.025)}
+.choice.candidateChoice .meta{grid-column:2}
+@media(max-width:580px){
+  .choice.candidateChoice{grid-template-columns:118px 1fr}
+  .candidateThumb{height:112px}
+}
+@media(max-width:420px){
+  .choice.candidateChoice{grid-template-columns:1fr}
+  .candidateThumb{height:190px}
+  .choice.candidateChoice .meta{grid-column:1}
+}
+
 </style>
 
 <link rel="icon" type="image/png" href="favicon.png">
@@ -591,10 +642,9 @@ html.introLocked, html.introLocked body{overflow:hidden}
   </header>
 
   <section class="section" id="choiceSection">
-    <div class="labScene" aria-label="PX-17 단백질 포켓과 소분자 후보 도식">
-      <div class="proteinBlob"></div>
-      <div class="ligandLine"></div>
-      <div class="labCaption">PX-17 단백질 포켓에 결합할 소분자 후보를 설계하는 교육용 시뮬레이션</div>
+    <div class="labScene workflowHero" aria-label="양자 신약 개발 연구 흐름 대표 이미지">
+      <img class="workflowHeroImage" src="hero-quantum-lab.jpg" alt="생명 데이터, 분자 설계, 양자 컴퓨팅, 단백질 포켓과 신약 도출이 연결된 연구 흐름" loading="eager">
+      <div class="workflowHeroCaption">생명 데이터에서 후보 분자 설계와 양자 계산을 거쳐 연구 결과를 분석하는 교육용 워크플로</div>
     </div>
     <div class="workflow" id="workflow">
   <div class="workflowStep active" data-step="0"><small>01</small><b>연구 환경</b></div>
@@ -820,12 +870,12 @@ const steps=[
  ]
 },
 {
- label:"MISSION 02 · CANDIDATE",q:"기준 후보 분자를 선택하십시오.",
- d:"강한 결합 가능성과 계산 용이성, 입체 충돌 위험은 서로 같은 방향으로 움직이지 않습니다.",
+ label:"MISSION 02 · CANDIDATE",q:"후보 분자를 선택하십시오.",
+ d:"각 후보는 결합력·계산 안정성·예산·계산 부담 사이에 서로 다른 장단점을 가집니다. 정답 하나가 아니라 연구 목표에 맞는 전략을 선택하십시오.",
  options:[
-  {id:"Luma-3",title:"Luma-3",text:"짧고 단순해 계산은 안정적이지만 결합 잠재력이 낮습니다.",icon:"<svg viewBox='0 0 100 60' aria-hidden='true'><line x1='28' y1='30' x2='72' y2='30' stroke='#dfe8f7' stroke-width='6' stroke-linecap='round'/><circle cx='22' cy='30' r='13' fill='#8bd3c7'/><circle cx='78' cy='30' r='13' fill='#9db7ff'/></svg>",cost:4,delta:{accuracy:2,binding:-8,noise:7,fit:4},run(){apply(this);state.candidate="Luma-3";logCause("Luma-3 선택","단순 구조로 계산 안정성과 구조 적합성을 얻었지만 결합 접점이 부족했습니다.");}},
-  {id:"Neris-7",title:"Neris-7",text:"안정적인 기준 후보로 해석과 비교가 쉽습니다.",icon:"⬡",cost:9,delta:{accuracy:5,binding:3,noise:4,fit:7},run(){apply(this);state.candidate="Neris-7";logCause("Neris-7 선택","구조 충돌이 적고 기준 후보로 해석하기 쉬워 지표가 고르게 개선되었습니다.");}},
-  {id:"Vela-9",title:"Vela-9",text:"결합 잠재력은 가장 높지만 긴 말단 때문에 충돌과 계산 부담이 큽니다.",icon:"〰️",cost:10,delta:{accuracy:-1,binding:15,noise:-4,fit:-14},run(){apply(this);state.candidate="Vela-9";logCause("Vela-9 선택","강한 결합 잠재력을 얻었지만 입체 충돌과 노이즈 민감도가 커졌습니다.");}}
+  {id:"Luma-3",title:"Luma-3",text:"계산이 빠르고 안정적이지만 결합력이 조금 부족한 안전형 후보입니다.",image:"luma-3.jpg",imageType:"candidate",imageAlt:"Luma-3 신약 후보 분자 구조",good:["계산 신뢰도 ▲▲","노이즈 안정성 ▲▲","예산 효율 ▲"],risk:["결합 잠재력 ▼"],cost:4,delta:{accuracy:5,binding:-7,noise:8,fit:2},run(){apply(this);state.candidate="Luma-3";logCause("Luma-3 선택","단순한 구조 덕분에 계산과 노이즈 안정성은 높아졌지만 포켓과 형성할 결합 접점은 부족했습니다.");}},
+  {id:"Neris-7",title:"Neris-7",text:"여러 지표의 균형이 좋은 표준형 후보지만 비용과 계산 시간이 더 필요합니다.",image:"neris-7.jpg",imageType:"candidate",imageAlt:"Neris-7 신약 후보 분자 구조",good:["결합 잠재력 ▲","계산 신뢰도 ▲","구조 적합성 ▲"],risk:["예산 소모 큼","계산 시간 증가"],cost:9,delta:{accuracy:3,binding:4,noise:1,fit:4},run(){apply(this);state.candidate="Neris-7";logCause("Neris-7 선택","지표가 고르게 개선되는 표준 후보이지만 더 큰 구조를 해석하기 위해 예산과 계산 시간이 증가했습니다.");}},
+  {id:"Vela-9",title:"Vela-9",text:"가장 강한 결합을 노리는 도전형 후보지만 입체 충돌과 계산 실패 위험이 큽니다.",image:"vela-9.jpg",imageType:"candidate",imageAlt:"Vela-9 신약 후보 분자 구조",good:["결합 잠재력 ▲▲▲"],risk:["노이즈 영향 큼","입체 충돌 위험","계산 실패 가능성"],cost:10,delta:{accuracy:-3,binding:14,noise:-6,fit:-10},run(){apply(this);state.candidate="Vela-9";logCause("Vela-9 선택","강한 결합 잠재력을 확보했지만 긴 말단과 복잡한 구조로 입체 충돌과 노이즈 민감도가 증가했습니다.");}}
  ]
 },
 {
@@ -1090,8 +1140,10 @@ function qualitativePreview(opt){
     if(v>0) positives.push(`${labels[k]} 개선`);
     if(v<0) negatives.push(`${labels[k]} 저하 가능`);
   });
-  const good=positives.length?positives.join(" · "):"직접적인 지표 상승 없음";
-  const risk=negatives.length?negatives.join(" · "):"뚜렷한 지표 손실 없음";
+  const customGood=Array.isArray(opt.good)?opt.good:[];
+  const customRisk=Array.isArray(opt.risk)?opt.risk:[];
+  const good=(customGood.length?customGood:positives).join(" · ")||"직접적인 지표 상승 없음";
+  const risk=(customRisk.length?customRisk:negatives).join(" · ")||"뚜렷한 지표 손실 없음";
   return `
     <div class="qualitative">
       <div class="qualRow qualGood"><b>장점</b><span>${good}</span></div>
@@ -1201,10 +1253,12 @@ function render(){
     const locked=state.budget<opt.cost;
     if(!locked) availableCount++;
     const btn=document.createElement("button");
-    btn.className=`choice${opt.image?" pocketChoice":""}`;
+    const imageChoiceClass=opt.imageType==="candidate"?" candidateChoice":(opt.image?" pocketChoice":"");
+    btn.className=`choice${imageChoiceClass}`;
     btn.disabled=locked;
+    const imageThumbClass=opt.imageType==="candidate"?"candidateThumb":"pocketThumb";
     const visual=opt.image
-      ? `<div class="icon pocketThumb"><img src="${opt.image}" alt="${opt.title} 3D 결합 포켓 이미지" loading="lazy"></div>`
+      ? `<div class="icon ${imageThumbClass}"><img src="${opt.image}" alt="${opt.imageAlt||`${opt.title} 이미지`}" loading="lazy"></div>`
       : `<div class="icon">${opt.icon}</div>`;
     btn.innerHTML=`
       ${visual}

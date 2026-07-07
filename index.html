@@ -497,6 +497,44 @@ html.introLocked, html.introLocked body{overflow:hidden}
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
+
+/* Binding pocket image cards */
+.choice.pocketChoice{
+  grid-template-columns:150px 1fr;
+  align-items:stretch;
+}
+.pocketThumb{
+  width:100%;
+  height:118px;
+  padding:0;
+  overflow:hidden;
+  background:#08101b;
+}
+.pocketThumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.choice.pocketChoice:hover .pocketThumb img{
+  transform:scale(1.025);
+}
+.pocketThumb img{transition:transform .25s ease}
+.choice.pocketChoice .meta{grid-column:2}
+@media(max-width:580px){
+  .choice.pocketChoice{
+    grid-template-columns:112px 1fr;
+  }
+  .pocketThumb{height:104px}
+}
+@media(max-width:420px){
+  .choice.pocketChoice{
+    grid-template-columns:1fr;
+  }
+  .pocketThumb{height:180px}
+  .choice.pocketChoice .meta{grid-column:1}
+}
+
 </style>
 
 <link rel="icon" type="image/png" href="favicon.png">
@@ -776,9 +814,9 @@ const steps=[
  label:"MISSION 01 · BINDING POCKET",q:"PX-17의 결합 포켓을 선택하십시오.",
  d:"어느 공간을 공략하는지에 따라 결합 가능성, 계산 난이도, 구조 적합성이 함께 바뀝니다.",
  options:[
-  {id:"A",title:"포켓 A",text:"얕고 접근이 쉬우나 결합 상호작용이 약할 수 있습니다.",icon:"◡",cost:4,delta:{accuracy:-2,binding:-5,noise:2,fit:-7},run(){apply(this);state.pocket="A";logCause("포켓 A 선택","계산은 쉬워졌지만 깊은 상호작용을 충분히 포착하지 못했습니다.");}},
-  {id:"B",title:"포켓 B",text:"깊은 중앙 포켓으로 수소결합과 소수성 접촉의 균형이 좋습니다.",icon:"∪",cost:8,delta:{accuracy:4,binding:6,fit:7},run(){apply(this);state.pocket="B";logCause("포켓 B 선택","수소결합과 소수성 접촉을 함께 반영해 결합 잠재력과 구조 적합성이 상승했습니다.");}},
-  {id:"C",title:"포켓 C",text:"좁고 특이적이지만 모델링과 회로 설계가 까다롭습니다.",icon:"⌄",cost:11,delta:{accuracy:6,binding:8,noise:-7,fit:2},run(){apply(this);state.pocket="C";logCause("포켓 C 선택","특이성은 확보했지만 계산 복잡도와 노이즈 부담이 커졌습니다.");}}
+  {id:"A",title:"포켓 A",text:"얕고 접근이 쉬우나 결합 상호작용이 약할 수 있습니다.",icon:"◡",image:"pocket-a.png",cost:4,delta:{accuracy:-2,binding:-5,noise:2,fit:-7},run(){apply(this);state.pocket="A";logCause("포켓 A 선택","계산은 쉬워졌지만 깊은 상호작용을 충분히 포착하지 못했습니다.");}},
+  {id:"B",title:"포켓 B",text:"깊은 중앙 포켓으로 수소결합과 소수성 접촉의 균형이 좋습니다.",icon:"∪",image:"pocket-b.png",cost:8,delta:{accuracy:4,binding:6,fit:7},run(){apply(this);state.pocket="B";logCause("포켓 B 선택","수소결합과 소수성 접촉을 함께 반영해 결합 잠재력과 구조 적합성이 상승했습니다.");}},
+  {id:"C",title:"포켓 C",text:"좁고 특이적이지만 모델링과 회로 설계가 까다롭습니다.",icon:"⌄",image:"pocket-c.png",cost:11,delta:{accuracy:6,binding:8,noise:-7,fit:2},run(){apply(this);state.pocket="C";logCause("포켓 C 선택","특이성은 확보했지만 계산 복잡도와 노이즈 부담이 커졌습니다.");}}
  ]
 },
 {
@@ -1163,10 +1201,13 @@ function render(){
     const locked=state.budget<opt.cost;
     if(!locked) availableCount++;
     const btn=document.createElement("button");
-    btn.className="choice";
+    btn.className=`choice${opt.image?" pocketChoice":""}`;
     btn.disabled=locked;
+    const visual=opt.image
+      ? `<div class="icon pocketThumb"><img src="${opt.image}" alt="${opt.title} 3D 결합 포켓 이미지" loading="lazy"></div>`
+      : `<div class="icon">${opt.icon}</div>`;
     btn.innerHTML=`
-      <div class="icon">${opt.icon}</div>
+      ${visual}
       <div>
         <strong>${opt.title}</strong>
         <p>${opt.text}</p>
